@@ -16,7 +16,7 @@ function App() {
   const [comments, setComments] = useState([])
   const [newComment, setNewComment] = useState('')
   const [commentLoading, setCommentLoading] = useState(false)
-  const [userName, setUserName] = useState(() => localStorage.getItem('kanban-user-name') || '')
+  const [userName, setUserName] = useState(() => localStorage.getItem('kanban-user-name') || '小鄭')
 
   // 載入任務
   useEffect(() => {
@@ -181,22 +181,6 @@ function App() {
         {error && <p className="text-red-500 mt-2">⚠️ {error}</p>}
       </div>
 
-      {/* 用戶名稱設定 */}
-      <div className="max-w-6xl mx-auto mb-4 flex items-center gap-3">
-        <span className="text-gray-600 text-sm">你的名字：</span>
-        <input
-          type="text"
-          placeholder="輸入你的名字"
-          value={userName}
-          onChange={(e) => {
-            setUserName(e.target.value)
-            localStorage.setItem('kanban-user-name', e.target.value)
-          }}
-          className="px-3 py-1.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-        />
-        {userName && <span className="text-green-600 text-sm">✓ 已設定</span>}
-      </div>
-
       {/* 新增任務 */}
       <div className="max-w-6xl mx-auto mb-6 bg-white rounded-lg shadow p-4 sm:p-6">
         <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">➕ 新增任務</h2>
@@ -330,7 +314,7 @@ function App() {
                             <span className="font-medium text-blue-600 text-sm">{comment.author || '匿名'}</span>
                             <span className="text-xs text-gray-400 flex-shrink-0 ml-2">{formatDate(comment.created_at)}</span>
                           </div>
-                          <p className="mt-1 text-sm text-gray-700 break-words">{comment.content}</p>
+                          <p className="mt-1 text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{comment.content}</p>
                         </div>
                       </div>
                     </div>
