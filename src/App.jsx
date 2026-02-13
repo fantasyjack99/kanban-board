@@ -319,7 +319,7 @@ function App() {
                         <img 
                           src={comment.avatar || DEFAULT_AVATAR} 
                           alt="avatar" 
-                          className="w-10 h-10 rounded-full object-cover border-2 border-blue-400"
+                          className="w-24 h-24 rounded-lg object-cover border-2 border-blue-400"
                         />
                         <div className="flex-1">
                           <div className="flex justify-between items-start">
