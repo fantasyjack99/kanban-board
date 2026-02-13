@@ -170,44 +170,37 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-screen bg-gray-100 p-4 sm:p-8">
       {/* Header */}
-      <div className="max-w-6xl mx-auto mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">📋 Sabrina & 小鄭 的 Kanban</h1>
-        <p className="text-gray-600 mt-2">💬 點擊卡片可以留言討論 🦊</p>
+      <div className="max-w-6xl mx-auto mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">📋 Sabrina & 小鄭</h1>
+        <p className="text-gray-600 mt-1 text-sm sm:text-base">💬 點擊卡片留言討論 🦊</p>
         {error && <p className="text-red-500 mt-2">⚠️ {error}</p>}
       </div>
 
       {/* 新增任務 */}
-      <div className="max-w-6xl mx-auto mb-8 bg-white rounded-lg shadow p-6">
-        <h2 className="text-lg font-semibold mb-4">➕ 新增任務</h2>
-        <div className="flex gap-4 flex-wrap">
+      <div className="max-w-6xl mx-auto mb-6 bg-white rounded-lg shadow p-4 sm:p-6">
+        <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">➕ 新增任務</h2>
+        <div className="flex flex-col sm:flex-row gap-3">
           <input
             type="text"
             placeholder="任務標題"
             value={newTask.title}
             onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-            className="flex-1 min-w-200 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <input
-            type="text"
-            placeholder="描述（可選）"
-            value={newTask.description}
-            onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-            className="flex-1 min-w-200 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <select
             value={newTask.priority}
             onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
-            className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="high">🔴 高優先</option>
-            <option value="medium">🟡 中優先</option>
-            <option value="low">🟢 低優先</option>
+            <option value="high">🔴 高</option>
+            <option value="medium">🟡 中</option>
+            <option value="low">🟢 低</option>
           </select>
           <button
             onClick={addTask}
-            className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
           >
             新增
           </button>
@@ -233,28 +226,20 @@ function App() {
                     draggable
                     onDragStart={(e) => handleDragStart(e, task)}
                     onClick={() => setSelectedTask(task)}
-                    className="bg-gray-50 rounded-lg p-4 shadow cursor-pointer hover:shadow-md transition"
+                    className="bg-gray-50 rounded-lg p-3 shadow cursor-pointer hover:shadow-md transition"
                   >
                     <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <h3 className="font-medium">{task.title}</h3>
-                        {task.description && (
-                          <p className="text-sm text-gray-500 mt-1">{task.description}</p>
-                        )}
-                        <div className="flex gap-2 mt-3 items-center">
-                          <span className={`px-2 py-1 rounded text-xs text-white ${priorityColors[task.priority]}`}>
-                            {task.priority === 'high' ? '🔴 高' : task.priority === 'medium' ? '🟡 中' : '🟢 低'}
+                      <div className="flex-1 pr-2">
+                        <h3 className="font-medium text-sm">{task.title}</h3>
+                        <div className="flex gap-2 mt-2 items-center flex-wrap">
+                          <span className={`px-2 py-0.5 rounded text-xs text-white ${priorityColors[task.priority]}`}>
+                            {task.priority === 'high' ? '🔴' : task.priority === 'medium' ? '🟡' : '🟢'}
                           </span>
-                          {task.created_at && (
-                            <span className="text-xs text-gray-400">
-                              {formatDate(task.created_at)}
-                            </span>
-                          )}
                         </div>
                       </div>
                       <button
                         onClick={(e) => { e.stopPropagation(); deleteTask(task.id); }}
-                        className="text-gray-400 hover:text-red-500 ml-2"
+                        className="text-gray-400 hover:text-red-500 text-lg p-1"
                       >
                         ✕
                       </button>
@@ -267,7 +252,7 @@ function App() {
       </div>
 
       {/* 統計 */}
-      <div className="max-w-6xl mx-auto mt-8 flex gap-6 text-gray-600">
+      <div className="max-w-6xl mx-auto mt-6 flex flex-wrap gap-4 text-sm text-gray-600">
         <span>📋 待辦: {tasks.filter(t => t.status === 'todo').length}</span>
         <span>🔥 進行中: {tasks.filter(t => t.status === 'doing').length}</span>
         <span>✅ 完成: {tasks.filter(t => t.status === 'done').length}</span>
@@ -276,19 +261,19 @@ function App() {
 
       {/* 任務詳情 Modal */}
       {selectedTask && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-end sm:items-center justify-center p-0 sm:p-4 z-50">
+          <div className="bg-white rounded-t-3xl sm:rounded-lg shadow-xl max-w-2xl w-full h-[85vh] sm:h-auto sm:max-h-[80vh] overflow-hidden flex flex-col">
             {/* Header */}
-            <div className="p-6 border-b bg-gray-50">
+            <div className="p-4 sm:p-6 border-b bg-gray-50 flex-shrink-0">
               <div className="flex justify-between items-start">
-                <div>
-                  <h2 className="text-xl font-bold">{selectedTask.title}</h2>
+                <div className="flex-1 pr-4">
+                  <h2 className="text-lg sm:text-xl font-bold">{selectedTask.title}</h2>
                   {selectedTask.description && (
-                    <p className="text-gray-600 mt-1">{selectedTask.description}</p>
+                    <p className="text-sm text-gray-600 mt-1 hidden sm:block">{selectedTask.description}</p>
                   )}
-                  <div className="flex gap-2 mt-3">
+                  <div className="flex gap-2 mt-2">
                     <span className={`px-2 py-1 rounded text-xs text-white ${priorityColors[selectedTask.priority]}`}>
-                      {selectedTask.priority === 'high' ? '🔴 高優先' : selectedTask.priority === 'medium' ? '🟡 中優先' : '🟢 低優先'}
+                      {selectedTask.priority === 'high' ? '🔴 高' : selectedTask.priority === 'medium' ? '🟡 中' : '🟢 低'}
                     </span>
                     <span className="px-2 py-1 bg-gray-200 rounded text-xs">
                       {selectedTask.status === 'todo' ? '📋 待辦' : selectedTask.status === 'doing' ? '🔥 進行中' : '✅ 完成'}
@@ -297,7 +282,7 @@ function App() {
                 </div>
                 <button
                   onClick={() => setSelectedTask(null)}
-                  className="text-gray-400 hover:text-gray-600 text-2xl"
+                  className="text-gray-400 hover:text-gray-600 text-2xl p-2"
                 >
                   ✕
                 </button>
@@ -305,28 +290,28 @@ function App() {
             </div>
 
             {/* 留言區 */}
-            <div className="p-6 max-h-96 overflow-y-auto">
-              <h3 className="font-semibold mb-4">💬 留言討論</h3>
+            <div className="flex-1 overflow-hidden flex flex-col p-4 sm:p-6">
+              <h3 className="font-semibold mb-3 flex-shrink-0">💬 留言討論</h3>
               
               {/* 留言列表 */}
-              <div className="space-y-4 mb-6">
+              <div className="flex-1 overflow-y-auto space-y-3 -mr-2 pr-2">
                 {comments.length === 0 ? (
-                  <p className="text-gray-400 text-center py-4">暫無留言</p>
+                  <p className="text-gray-400 text-center py-8">暫無留言</p>
                 ) : (
                   comments.map((comment) => (
-                    <div key={comment.id} className="bg-gray-50 rounded-lg p-4">
+                    <div key={comment.id} className="bg-gray-50 rounded-lg p-3">
                       <div className="flex items-start gap-3">
                         <img 
                           src={comment.avatar || DEFAULT_AVATAR} 
                           alt="avatar" 
-                          className="w-24 h-24 rounded-lg object-cover border-2 border-blue-400"
+                          className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover border-2 border-blue-400 flex-shrink-0"
                         />
-                        <div className="flex-1">
+                        <div className="flex-1 min-w-0">
                           <div className="flex justify-between items-start">
-                            <span className="font-medium text-blue-600">{comment.author || '匿名'}</span>
-                            <span className="text-xs text-gray-400">{formatDate(comment.created_at)}</span>
+                            <span className="font-medium text-blue-600 text-sm">{comment.author || '匿名'}</span>
+                            <span className="text-xs text-gray-400 flex-shrink-0 ml-2">{formatDate(comment.created_at)}</span>
                           </div>
-                          <p className="mt-1 text-gray-700">{comment.content}</p>
+                          <p className="mt-1 text-sm text-gray-700 break-words">{comment.content}</p>
                         </div>
                       </div>
                     </div>
@@ -335,18 +320,18 @@ function App() {
               </div>
 
               {/* 新增留言 */}
-              <div className="border-t pt-4">
+              <div className="border-t pt-3 mt-3 flex-shrink-0">
                 <textarea
                   placeholder="💬 留言..."
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
-                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                  rows="3"
+                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm"
+                  rows="2"
                 />
                 <button
                   onClick={addComment}
                   disabled={!newComment.trim()}
-                  className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition disabled:opacity-50"
+                  className="mt-2 w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition disabled:opacity-50"
                 >
                   送出留言
                 </button>
