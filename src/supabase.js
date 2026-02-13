@@ -27,11 +27,11 @@ export const tasksApi = {
     return data[0]
   },
 
-  // 更新任務狀態
-  async updateStatus(id, status) {
+  // 更新任務
+  async update(id, updates) {
     const { error } = await supabase
       .from('tasks')
-      .update({ status })
+      .update(updates)
       .eq('id', id)
     if (error) throw error
   },
@@ -43,13 +43,51 @@ export const tasksApi = {
       .delete()
       .eq('id', id)
     if (error) throw error
+  }
+}
+
+// 留言操作
+export const commentsApi = {
+  // 獲取任務的所有留言
+  async getByTaskId(taskId) {
+    const { data, error } = await supabase
+      .from('comments')
+      .select('*')
+      .eq('task_id', taskId)
+      .order('created_at', { ascending: true })
+    if (error) throw error
+    return data || []
   },
 
-  // 即時訂閱更新
-  subscribe(callback) {
+  // 新增留言
+  async add(comment) {
+    const { data, error } = await supabase
+      .from('comments')
+      .insert([comment])
+      .select()
+    if (error) throw error
+    return data[0]
+  },
+
+  // 刪除留言
+  async delete(id) {
+    const { error } = await supabase
+      .from('comments')
+      .delete()
+      .eq('id', id)
+    if (error) throw error
+  },
+
+  // 即時訂閱
+  subscribe(taskId, callback) {
     return supabase
-      .channel('tasks')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, callback)
+      .channel(`comments-${taskId}`)
+      .on('postgres_changes', { 
+        event: '*', 
+        schema: 'public', 
+        table: 'comments',
+        filter: `task_id=eq.${taskId}`
+      }, callback)
       .subscribe()
   }
 }
