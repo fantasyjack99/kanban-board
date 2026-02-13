@@ -16,6 +16,7 @@ function App() {
   const [comments, setComments] = useState([])
   const [newComment, setNewComment] = useState('')
   const [commentLoading, setCommentLoading] = useState(false)
+  const [userName, setUserName] = useState(() => localStorage.getItem('kanban-user-name') || '')
 
   // 載入任務
   useEffect(() => {
@@ -92,21 +93,23 @@ function App() {
 
   const addComment = async () => {
     if (!newComment.trim() || !selectedTask) return
+    
+    // 判斷是 Sabrina 還是 小鄭
+    const isSabrina = userName === 'Sabrina'
+    const commentData = {
+      task_id: selectedTask.id,
+      content: newComment,
+      author: isSabrina ? 'Sabrina' : (userName || '小鄭'),
+      avatar: isSabrina ? DEFAULT_AVATAR : null
+    }
+    
     try {
-      await commentsApi.add({
-        task_id: selectedTask.id,
-        content: newComment,
-        author: 'Sabrina',
-        avatar: DEFAULT_AVATAR
-      })
+      await commentsApi.add(commentData)
       setNewComment('')
     } catch (err) {
       const comment = {
         id: Date.now(),
-        task_id: selectedTask.id,
-        content: newComment,
-        author: 'Sabrina',
-        avatar: DEFAULT_AVATAR,
+        ...commentData,
         created_at: new Date().toISOString()
       }
       const saved = JSON.parse(localStorage.getItem(`comments-${selectedTask.id}`) || '[]')
@@ -176,6 +179,22 @@ function App() {
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">📋 Sabrina & 小鄭</h1>
         <p className="text-gray-600 mt-1 text-sm sm:text-base">💬 點擊卡片留言討論 🦊</p>
         {error && <p className="text-red-500 mt-2">⚠️ {error}</p>}
+      </div>
+
+      {/* 用戶名稱設定 */}
+      <div className="max-w-6xl mx-auto mb-4 flex items-center gap-3">
+        <span className="text-gray-600 text-sm">你的名字：</span>
+        <input
+          type="text"
+          placeholder="輸入你的名字"
+          value={userName}
+          onChange={(e) => {
+            setUserName(e.target.value)
+            localStorage.setItem('kanban-user-name', e.target.value)
+          }}
+          className="px-3 py-1.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+        />
+        {userName && <span className="text-green-600 text-sm">✓ 已設定</span>}
       </div>
 
       {/* 新增任務 */}
