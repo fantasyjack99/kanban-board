@@ -304,11 +304,17 @@ function App() {
                   comments.map((comment) => (
                     <div key={comment.id} className="bg-gray-50 rounded-lg p-3">
                       <div className="flex items-start gap-3">
-                        <img 
-                          src={comment.avatar || DEFAULT_AVATAR} 
-                          alt="avatar" 
-                          className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover border-2 border-blue-400 flex-shrink-0"
-                        />
+                        {comment.avatar ? (
+                          <img 
+                            src={comment.avatar} 
+                            alt="avatar" 
+                            className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover border-2 border-blue-400 flex-shrink-0"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg bg-gray-200 flex items-center justify-center text-gray-400 flex-shrink-0">
+                            {comment.author?.[0] || '匿名'}
+                          </div>
+                        )}
                         <div className="flex-1 min-w-0">
                           <div className="flex justify-between items-start">
                             <span className="font-medium text-blue-600 text-sm">{comment.author || '匿名'}</span>
