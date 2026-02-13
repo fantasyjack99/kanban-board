@@ -91,3 +91,6 @@ export const commentsApi = {
       .subscribe()
   }
 }
+
+// 預設大頭貼
+export const DEFAULT_AVATAR = 'https://mhmfqquydthwejvzdjou.supabase.co/storage/v1/object/public/avatars/sabrina.png'

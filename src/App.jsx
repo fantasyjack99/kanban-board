@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { supabase, tasksApi, commentsApi } from './supabase'
+import { supabase, tasksApi, commentsApi, DEFAULT_AVATAR } from './supabase'
 
 const priorityColors = {
   high: 'bg-red-500',
@@ -96,7 +96,8 @@ function App() {
       await commentsApi.add({
         task_id: selectedTask.id,
         content: newComment,
-        author: '小鄭'
+        author: 'Sabrina',
+        avatar: DEFAULT_AVATAR
       })
       setNewComment('')
     } catch (err) {
@@ -104,7 +105,8 @@ function App() {
         id: Date.now(),
         task_id: selectedTask.id,
         content: newComment,
-        author: '小鄭',
+        author: 'Sabrina',
+        avatar: DEFAULT_AVATAR,
         created_at: new Date().toISOString()
       }
       const saved = JSON.parse(localStorage.getItem(`comments-${selectedTask.id}`) || '[]')
@@ -313,11 +315,20 @@ function App() {
                 ) : (
                   comments.map((comment) => (
                     <div key={comment.id} className="bg-gray-50 rounded-lg p-4">
-                      <div className="flex justify-between items-start">
-                        <span className="font-medium text-blue-600">{comment.author || '匿名'}</span>
-                        <span className="text-xs text-gray-400">{formatDate(comment.created_at)}</span>
+                      <div className="flex items-start gap-3">
+                        <img 
+                          src={comment.avatar || DEFAULT_AVATAR} 
+                          alt="avatar" 
+                          className="w-10 h-10 rounded-full object-cover border-2 border-blue-400"
+                        />
+                        <div className="flex-1">
+                          <div className="flex justify-between items-start">
+                            <span className="font-medium text-blue-600">{comment.author || '匿名'}</span>
+                            <span className="text-xs text-gray-400">{formatDate(comment.created_at)}</span>
+                          </div>
+                          <p className="mt-1 text-gray-700">{comment.content}</p>
+                        </div>
                       </div>
-                      <p className="mt-2 text-gray-700">{comment.content}</p>
                     </div>
                   ))
                 )}
